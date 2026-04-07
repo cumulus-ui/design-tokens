@@ -1,0 +1,12 @@
+cumulus-ui/design-tokens
+Copyright 2025 cumulus-ui contributors.
+
+This project includes derived works from:
+
+  Cloudscape Design Tokens
+  Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+  SPDX-License-Identifier: Apache-2.0
+  https://github.com/cloudscape-design/design-tokens
+
+  Generated files (tokens.css, index.js, index.d.ts) are derived from
+  Cloudscape design token definitions.

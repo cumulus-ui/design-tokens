@@ -112,7 +112,9 @@ function generate(): void {
   }
 
   const css = [
-    '/* AUTO-GENERATED from @cloudscape-design/design-tokens — DO NOT EDIT */',
+    '/* AUTO-GENERATED from @cloudscape-design/design-tokens — DO NOT EDIT',
+    ' * License: see /NOTICE',
+    ' */',
     `/* ${matched} tokens, ${darkLines.length} dark overrides */`,
     '',
     ':root {',
@@ -127,12 +129,14 @@ function generate(): void {
 
   const js = [
     '// AUTO-GENERATED from @cloudscape-design/design-tokens — DO NOT EDIT',
+    '// License: see /NOTICE',
     ...jsLines,
     '',
   ].join('\n');
 
   const dts = [
     '// AUTO-GENERATED from @cloudscape-design/design-tokens — DO NOT EDIT',
+    '// License: see /NOTICE',
     ...dtsLines,
     '',
   ].join('\n');
