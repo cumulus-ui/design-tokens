@@ -1,0 +1,35 @@
+{
+  "name": "@cumulus-ui/design-tokens",
+  "version": "0.0.1",
+  "description": "CSS custom properties for Cumulus UI — light and dark mode tokens generated from Cloudscape Design System",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./tokens.css": "./tokens.css"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "tokens.css"
+  ],
+  "scripts": {
+    "generate": "tsx scripts/generate.ts"
+  },
+  "keywords": [
+    "cloudscape",
+    "design-tokens",
+    "css-custom-properties",
+    "dark-mode"
+  ],
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@cloudscape-design/design-tokens": "^3.0.78",
+    "tsx": "^4.21.0",
+    "typescript": "~5.7.0"
+  }
+}
