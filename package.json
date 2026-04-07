@@ -30,6 +30,6 @@
   "devDependencies": {
     "@cloudscape-design/design-tokens": "^3.0.78",
     "tsx": "^4.21.0",
-    "typescript": "~5.7.0"
+    "typescript": "~5.9.3"
   }
 }
