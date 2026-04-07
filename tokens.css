@@ -1,5 +1,5 @@
 /* AUTO-GENERATED from @cloudscape-design/design-tokens — DO NOT EDIT */
-/* 398 tokens, 296 dark overrides */
+/* 437 tokens, 296 dark overrides */
 
 :root {
   --color-charts-red-300-2k7eul: #ea7158;
@@ -398,6 +398,45 @@
   --border-width-icon-medium-b7icqv: 2px;
   --border-width-icon-big-ymgy42: 3px;
   --border-width-icon-large-u645rg: 4px;
+  --motion-duration-avatar-gen-ai-gradient-84si5n: 3600ms;
+  --motion-duration-avatar-loading-dots-1xxvis: 1200ms;
+  --motion-easing-avatar-gen-ai-gradient-9fwaak: cubic-bezier(0.7, 0, 0.3, 1);
+  --motion-easing-responsive-hjj3ai: cubic-bezier(0, 0, 0, 1);
+  --motion-easing-sticky-tn072u: cubic-bezier(1, 0, 0.83, 1);
+  --motion-easing-expressive-o5jqzg: cubic-bezier(0.84, 0, 0.16, 1);
+  --motion-duration-responsive-mehora: 115ms;
+  --motion-duration-expressive-cbdcwy: 165ms;
+  --motion-duration-complex-tbdo30: 250ms;
+  --motion-keyframes-fade-in-0r842q: awsui-fade-in-35003c;
+  --motion-keyframes-fade-out-g7fgdu: awsui-fade-out-35003c;
+  --motion-keyframes-status-icon-error-wkou39: awsui-status-icon-error-35003c;
+  --motion-keyframes-scale-popup-9iqcu0: awsui-scale-popup-35003c;
+  --space-alert-vertical-dlp5wr: 8px;
+  --space-card-horizontal-default-pihe12: 20px;
+  --space-card-horizontal-embedded-sasxhu: 12px;
+  --space-card-vertical-default-e40tif: 16px;
+  --space-card-vertical-embedded-30pnhg: 10px;
+  --space-container-horizontal-nqrzyh: 20px;
+  --space-field-horizontal-0aq2ch: 12px;
+  --space-tree-view-indentation-xh9kis: 24px;
+  --space-scaled-xxxs-oo06c7: 2px;
+  --space-scaled-xxs-pfm1nx: 4px;
+  --space-scaled-xs-xwoogq: 8px;
+  --space-scaled-s-8ozaad: 12px;
+  --space-scaled-m-m892r9: 16px;
+  --space-scaled-l-sej05l: 20px;
+  --space-scaled-xl-dunxp5: 24px;
+  --space-scaled-xxl-6wgq96: 32px;
+  --space-scaled-xxxl-hwoy7j: 40px;
+  --space-static-xxxs-yidks1: 2px;
+  --space-static-xxs-ns94dp: 4px;
+  --space-static-xs-gnm0mz: 8px;
+  --space-static-s-t763lu: 12px;
+  --space-static-m-m6qboo: 16px;
+  --space-static-l-n53k41: 20px;
+  --space-static-xl-4tedi6: 24px;
+  --space-static-xxl-ifa9j8: 32px;
+  --space-static-xxxl-tngnnz: 40px;
   --shadow-card-hmrw4q: none;
   --shadow-container-active-ypjjoc: 0px 1px 1px 1px #e9ebed, 0px 6px 36px #0007161a;
 }

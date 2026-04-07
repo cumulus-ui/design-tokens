@@ -61,10 +61,15 @@ function parseTokenValues(): Record<string, TokenValues> {
 
   for (const [name, def] of Object.entries(json.tokens) as [string, any][]) {
     if (!def.$value) continue;
-    if (typeof def.$value === 'string') {
-      result[name] = { light: def.$value, dark: def.$value };
-    } else if (typeof def.$value.light === 'string' && typeof def.$value.dark === 'string') {
-      result[name] = { light: def.$value.light, dark: def.$value.dark };
+    const v = def.$value;
+    if (typeof v === 'string') {
+      result[name] = { light: v, dark: v };
+    } else if (typeof v.light === 'string') {
+      result[name] = { light: v.light, dark: v.dark };
+    } else if (typeof v.comfortable === 'string') {
+      result[name] = { light: v.comfortable, dark: v.comfortable };
+    } else if (typeof v.default === 'string') {
+      result[name] = { light: v.default, dark: v.default };
     }
   }
 
