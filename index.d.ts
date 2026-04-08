@@ -1,4 +1,5 @@
 // AUTO-GENERATED from @cloudscape-design/design-tokens — DO NOT EDIT
+// License: see /NOTICE
 export declare const colorChartsRed300: string;
 export declare const colorChartsRed400: string;
 export declare const colorChartsRed500: string;

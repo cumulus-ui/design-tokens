@@ -2,14 +2,17 @@
 /**
  * generate.ts
  *
- * Reads @cloudscape-design/design-tokens and generates a single tokens.css file
- * with CSS custom properties for light mode (:root) and dark mode (.awsui-dark-mode).
+ * Reads @cloudscape-design/design-tokens and generates clean, hash-free token
+ * files: tokens.css, index.js, and index.d.ts.
  *
- * The Cloudscape design-tokens package provides:
- *   - index-visual-refresh.json: token names with { light, dark } values
- *   - index.js: JS exports with hashed CSS property names (e.g. --color-text-body-default-vvtq8u)
+ * Cloudscape uses content-hashed CSS property names (e.g. --color-text-body-default-vvtq8u)
+ * for versioning and collision avoidance in their React ecosystem. Cumulus strips these
+ * hashes entirely — our CSS properties use the canonical token names directly
+ * (e.g. --color-text-body-default). See README.md for the rationale.
  *
- * We need both: the JSON for light/dark values, the JS for the hash-suffixed property names.
+ * Source data:
+ *   - index-visual-refresh.json: canonical token names with { light, dark } values
+ *   - index.js: used only to discover which tokens exist (we extract names by stripping hashes)
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -20,32 +23,27 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = resolve(__dirname, '..');
 const DT_DIR = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/design-tokens');
 
-// ─── 1. Parse hashed CSS property names from index.js ─────────
+// ─── 1. Discover token names from upstream JS ─────────────────
 
-interface PropertyMapping {
-  /** e.g. "color-charts-red-300" */
-  tokenName: string;
-  /** e.g. "color-charts-red-300-2k7eul" */
-  cssProperty: string;
-}
-
-function parsePropertyMappings(): PropertyMapping[] {
+function parseTokenNames(): string[] {
   const js = readFileSync(resolve(DT_DIR, 'index.js'), 'utf-8');
   const re = /var\(--([a-z0-9-]+),\s*[^)]+\)/g;
-  const mappings: PropertyMapping[] = [];
+  const names: string[] = [];
   const seen = new Set<string>();
 
   let m: RegExpExecArray | null;
   while ((m = re.exec(js)) !== null) {
-    const cssProperty = m[1];
-    if (seen.has(cssProperty)) continue;
-    seen.add(cssProperty);
-    const lastDash = cssProperty.lastIndexOf('-');
-    const tokenName = cssProperty.slice(0, lastDash);
-    mappings.push({ tokenName, cssProperty });
+    const hashedName = m[1];
+    // Strip the 6-char hash suffix to get the canonical token name
+    const lastDash = hashedName.lastIndexOf('-');
+    const tokenName = hashedName.slice(0, lastDash);
+    if (!seen.has(tokenName)) {
+      seen.add(tokenName);
+      names.push(tokenName);
+    }
   }
 
-  return mappings;
+  return names;
 }
 
 // ─── 2. Parse light/dark values from JSON ─────────────────────
@@ -83,7 +81,7 @@ function kebabToCamel(s: string): string {
 }
 
 function generate(): void {
-  const mappings = parsePropertyMappings();
+  const tokenNames = parseTokenNames();
   const values = parseTokenValues();
 
   const lightLines: string[] = [];
@@ -93,21 +91,23 @@ function generate(): void {
   let matched = 0;
   let skipped = 0;
 
-  for (const { tokenName, cssProperty } of mappings) {
+  for (const tokenName of tokenNames) {
     const val = values[tokenName];
     if (!val) {
       skipped++;
       continue;
     }
     matched++;
-    lightLines.push(`  --${cssProperty}: ${val.light};`);
+
+    // CSS: clean names, no hashes
+    lightLines.push(`  --${tokenName}: ${val.light};`);
     if (val.dark !== val.light) {
-      darkLines.push(`  --${cssProperty}: ${val.dark};`);
+      darkLines.push(`  --${tokenName}: ${val.dark};`);
     }
 
+    // JS: var() references without fallbacks — tokens.css must be loaded
     const camelName = kebabToCamel(tokenName);
-    const varExpr = `var(--${cssProperty}, ${val.light})`;
-    jsLines.push(`export const ${camelName} = "${varExpr}";`);
+    jsLines.push(`export const ${camelName} = "var(--${tokenName})";`);
     dtsLines.push(`export declare const ${camelName}: string;`);
   }
 
