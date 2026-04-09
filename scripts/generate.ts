@@ -22,8 +22,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = resolve(__dirname, '..');
 const DT_DIR = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/design-tokens');
-const STYLES_CSS = resolve(PKG_ROOT, '../components/node_modules/@cloudscape-design/components/internal/base-component/styles.scoped.css');
-const COMPONENTS_CSS_DIR = resolve(PKG_ROOT, '../components/node_modules/@cloudscape-design/components');
+const STYLES_CSS = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/components/internal/base-component/styles.scoped.css');
 const COMPONENTS_SRC = resolve(PKG_ROOT, '../components/src');
 
 // ─── 1. Discover token names from upstream JS ─────────────────
@@ -149,50 +148,7 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
     }
   }
 
-  // For tokens not in global-styles, extract fallback values from component CSS
-  const stillMissing = [...missing].filter(t => !result[t]);
-  if (stillMissing.length > 0 && COMPONENTS_CSS_DIR) {
-    const componentCss = collectComponentCss(COMPONENTS_CSS_DIR);
-    for (const tokenName of stillMissing) {
-      const searchStr = `var(--${tokenName}-`;
-      let pos = 0;
-      while (pos < componentCss.length) {
-        const idx = componentCss.indexOf(searchStr, pos);
-        if (idx === -1) break;
-        const commaIdx = componentCss.indexOf(',', idx + searchStr.length);
-        if (commaIdx === -1 || commaIdx - idx > 50) { pos = idx + 1; continue; }
-        let depth = 1;
-        let end = commaIdx + 1;
-        while (end < componentCss.length && depth > 0) {
-          if (componentCss[end] === '(') depth++;
-          if (componentCss[end] === ')') depth--;
-          end++;
-        }
-        if (depth === 0) {
-          const value = dehashValue(componentCss.slice(commaIdx + 1, end - 1).trim());
-          if (!value.includes('{')) {
-            result[tokenName] = { light: value, dark: value };
-            break;
-          }
-        }
-        pos = idx + 1;
-      }
-    }
-  }
-
   return result;
-}
-
-function collectComponentCss(dir: string): string {
-  let css = '';
-  for (const entry of readdirSync(dir, { withFileTypes: true })) {
-    const full = join(dir, entry.name);
-    if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
-      const scoped = join(full, 'styles.scoped.css');
-      try { css += readFileSync(scoped, 'utf-8'); } catch {}
-    }
-  }
-  return css;
 }
 
 // ─── 4. Generate CSS + JS ─────────────────────────────────────
