@@ -295,7 +295,7 @@ function generate(): void {
     ...lightLines,
     '}',
     '',
-    '.awsui-dark-mode {',
+    ':root.awsui-dark-mode {',
     '  color-scheme: dark;',
     ...darkLines,
     '}',

@@ -785,7 +785,7 @@
   --color-grey-transparent: rgba(15, 20, 26, 0.12);
 }
 
-.awsui-dark-mode {
+:root.awsui-dark-mode {
   color-scheme: dark;
   --color-charts-red-300: #d63f38;
   --color-charts-red-400: #ed5958;
