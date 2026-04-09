@@ -1,6 +1,6 @@
 {
   "name": "@cumulus-ui/design-tokens",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "CSS custom properties for Cumulus UI — light and dark mode tokens generated from Cloudscape Design System",
   "type": "module",
   "main": "./dist/index.js",
