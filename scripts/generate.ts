@@ -154,11 +154,28 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
   if (stillMissing.length > 0 && COMPONENTS_CSS_DIR) {
     const componentCss = collectComponentCss(COMPONENTS_CSS_DIR);
     for (const tokenName of stillMissing) {
-      const fallbackRe = new RegExp(`var\\(--${tokenName}-[a-z0-9]{6},\\s*([^)]+)\\)`, 'g');
-      const fm = fallbackRe.exec(componentCss);
-      if (fm) {
-        const value = dehashValue(fm[1].trim());
-        result[tokenName] = { light: value, dark: value };
+      const searchStr = `var(--${tokenName}-`;
+      let pos = 0;
+      while (pos < componentCss.length) {
+        const idx = componentCss.indexOf(searchStr, pos);
+        if (idx === -1) break;
+        const commaIdx = componentCss.indexOf(',', idx + searchStr.length);
+        if (commaIdx === -1 || commaIdx - idx > 50) { pos = idx + 1; continue; }
+        let depth = 1;
+        let end = commaIdx + 1;
+        while (end < componentCss.length && depth > 0) {
+          if (componentCss[end] === '(') depth++;
+          if (componentCss[end] === ')') depth--;
+          end++;
+        }
+        if (depth === 0) {
+          const value = dehashValue(componentCss.slice(commaIdx + 1, end - 1).trim());
+          if (!value.includes('{')) {
+            result[tokenName] = { light: value, dark: value };
+            break;
+          }
+        }
+        pos = idx + 1;
       }
     }
   }
