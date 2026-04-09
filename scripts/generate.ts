@@ -15,7 +15,7 @@
  *   - index.js: used only to discover which tokens exist (we extract names by stripping hashes)
  */
 
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -316,9 +316,11 @@ function generate(): void {
     '',
   ].join('\n');
 
-  writeFileSync(resolve(PKG_ROOT, 'tokens.css'), css);
-  writeFileSync(resolve(PKG_ROOT, 'index.js'), js);
-  writeFileSync(resolve(PKG_ROOT, 'index.d.ts'), dts);
+  const DIST = resolve(PKG_ROOT, 'dist');
+  mkdirSync(DIST, { recursive: true });
+  writeFileSync(resolve(DIST, 'tokens.css'), css);
+  writeFileSync(resolve(DIST, 'index.js'), js);
+  writeFileSync(resolve(DIST, 'index.d.ts'), dts);
 
   console.log(`✓ Generated tokens.css, index.js, index.d.ts`);
   console.log(`  Tokens: ${matched} (${skipped} skipped)`);
