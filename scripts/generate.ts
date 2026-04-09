@@ -110,18 +110,23 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
     referencedTokens.add(rm[1]);
   }
 
-  for (const entry of readdirSync(CS_DIR, { withFileTypes: true })) {
-    if (!entry.isDirectory()) continue;
-    const scoped = join(CS_DIR, entry.name, 'styles.scoped.css');
-    try {
-      const css = readFileSync(scoped, 'utf-8');
-      let cm: RegExpExecArray | null;
-      const cRe = /var\(--([\w-]+)-[a-z0-9]{6}[,)]/g;
-      while ((cm = cRe.exec(css)) !== null) {
-        referencedTokens.add(cm[1]);
-      }
-    } catch {}
+  function scanCssDir(dir: string): void {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const sub = join(dir, entry.name);
+      const scoped = join(sub, 'styles.scoped.css');
+      try {
+        const css = readFileSync(scoped, 'utf-8');
+        const cRe = /var\(--([\w-]+)-[a-z0-9]{6}[,)]/g;
+        let cm: RegExpExecArray | null;
+        while ((cm = cRe.exec(css)) !== null) {
+          referencedTokens.add(cm[1]);
+        }
+      } catch {}
+      scanCssDir(sub);
+    }
   }
+  scanCssDir(CS_DIR);
 
   const missing = new Set<string>();
   for (const token of referencedTokens) {

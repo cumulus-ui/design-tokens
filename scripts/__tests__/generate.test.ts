@@ -66,18 +66,26 @@ describe('tokens.css', () => {
     expect(dark).not.toMatch(/--space-grid-gutter/);
   });
 
-  it('has critical tokens', () => {
-    const text = css();
-    for (const token of [
-      'color-background-layout-main',
-      'color-text-body-default',
-      'color-border-divider-default',
-      'color-background-container-content',
-      'space-layout-content-horizontal',
-      'font-size-body-m',
-      'border-radius-tiles',
-    ]) {
-      expect(text).toContain(`--${token}:`);
-    }
+  it('has public JSON tokens (color)', () => {
+    expect(css()).toContain('--color-background-layout-main:');
+    expect(css()).toContain('--color-text-body-default:');
+  });
+
+  it('has public JSON tokens (spacing, border, font)', () => {
+    expect(css()).toContain('--font-size-body-m:');
+    expect(css()).toContain('--border-radius-tiles:');
+  });
+
+  it('has tokens only found in base-component CSS', () => {
+    expect(css()).toContain('--color-border-divider-default:');
+    expect(css()).toContain('--color-background-container-content:');
+  });
+
+  it('has tokens only found in individual component CSS', () => {
+    expect(css()).toContain('--space-layout-content-horizontal:');
+  });
+
+  it('has tokens from nested component subdirectories', () => {
+    expect(css()).toContain('--shadow-panel:');
   });
 });
