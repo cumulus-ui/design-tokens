@@ -23,7 +23,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = resolve(__dirname, '..');
 const DT_DIR = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/design-tokens');
 const STYLES_CSS = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/components/internal/base-component/styles.scoped.css');
-const COMPONENTS_SRC = resolve(PKG_ROOT, '../components/src');
+const CS_DIR = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/components');
 
 // ─── 1. Discover token names from upstream JS ─────────────────
 
@@ -103,22 +103,25 @@ function dehashValue(value: string): string {
 function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues> {
   const referencedTokens = new Set<string>();
 
-  function scanDir(dir: string): void {
-    for (const entry of readdirSync(dir, { withFileTypes: true })) {
-      if (entry.isDirectory()) {
-        scanDir(join(dir, entry.name));
-      } else if (entry.name.endsWith('.ts')) {
-        const content = readFileSync(join(dir, entry.name), 'utf-8');
-        const re = /var\(--([a-z][a-z0-9-]*?)(?:,|\))/g;
-        let m: RegExpExecArray | null;
-        while ((m = re.exec(content)) !== null) {
-          referencedTokens.add(m[1]);
-        }
-      }
-    }
+  const stylesCss = readFileSync(STYLES_CSS, 'utf-8');
+  const refRe = /var\(--([\w-]+)-[a-z0-9]{6}[,)]/g;
+  let rm: RegExpExecArray | null;
+  while ((rm = refRe.exec(stylesCss)) !== null) {
+    referencedTokens.add(rm[1]);
   }
 
-  scanDir(COMPONENTS_SRC);
+  for (const entry of readdirSync(CS_DIR, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const scoped = join(CS_DIR, entry.name, 'styles.scoped.css');
+    try {
+      const css = readFileSync(scoped, 'utf-8');
+      let cm: RegExpExecArray | null;
+      const cRe = /var\(--([\w-]+)-[a-z0-9]{6}[,)]/g;
+      while ((cm = cRe.exec(css)) !== null) {
+        referencedTokens.add(cm[1]);
+      }
+    } catch {}
+  }
 
   const missing = new Set<string>();
   for (const token of referencedTokens) {
@@ -129,7 +132,6 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
 
   if (missing.size === 0) return {};
 
-  const stylesCss = readFileSync(STYLES_CSS, 'utf-8');
   const result: Record<string, TokenValues> = {};
 
   for (const tokenName of missing) {
