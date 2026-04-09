@@ -491,6 +491,7 @@
   --space-button-inline-icon-focus-outline-gutter: 0px;
   --space-button-icon-only-horizontal: 6px;
   --space-button-modal-dismiss-vertical: var(--space-scaled-xxxs);
+  --shadow-dropdown: 0px 4px 20px 1px rgba(0, 7, 22, 0.10);
   --motion-easing-show-quick: ease-out;
   --color-border-dropdown-group: var(--color-border-dropdown-item-default);
   --motion-duration-show-quick: var(--motion-duration-moderate);
@@ -507,6 +508,8 @@
   --space-container-header-bottom: var(--space-scaled-xs);
   --space-table-header-tools-full-page-bottom: 4px;
   --size-control: 16px;
+  --color-background-code-editor-status-bar: var(--color-neutral-200);
+  --color-border-code-editor-default: var(--color-neutral-300);
   --border-radius-code-editor: var(--border-radius-input);
   --color-border-code-editor-ace-active-line-light-theme: var(--color-neutral-300);
   --color-border-code-editor-ace-active-line-dark-theme: var(--color-neutral-600);
@@ -515,8 +518,6 @@
   --color-background-code-editor-gutter-active-line-default: var(--color-neutral-600);
   --color-text-code-editor-gutter-active-line: var(--color-white);
   --color-background-code-editor-gutter-active-line-error: var(--color-text-status-error);
-  --color-border-code-editor-default: var(--color-neutral-300);
-  --color-background-code-editor-status-bar: var(--color-neutral-200);
   --color-transparent: transparent;
   --color-background-code-editor-pane-item-hover: var(--color-neutral-250);
   --color-border-code-editor-pane-item-hover: var(--color-border-dropdown-item-hover);
@@ -528,6 +529,7 @@
   --border-code-editor-status-divider-width: var(--border-divider-section-width);
   --color-border-tabs-divider: var(--color-neutral-350);
   --color-background-code-editor-loading: var(--color-neutral-100);
+  --shadow-panel: 0px 0px 0px 1px #b6bec9;
   --color-text-form-label: var(--color-text-form-default);
   --border-divider-list-width: 1px;
   --border-container-top-width: 0px;
@@ -584,7 +586,6 @@
   --border-control-invalid-focus-ring-shadow-spread: 2px;
   --space-field-icon-offset: 36px;
   --color-text-control-disabled: var(--color-text-interactive-disabled);
-  --shadow-panel: 0px 0px 0px 1px #b6bec9;
   --color-background-layout-panel-content: var(--color-background-container-content);
   --color-background-layout-panel-hover: var(--color-neutral-250);
   --color-border-layout: var(--color-neutral-350);
@@ -607,7 +608,6 @@
   --color-border-control-checked: var(--color-background-control-checked);
   --color-background-direction-button-default: var(--color-neutral-650);
   --color-text-direction-button-default: var(--color-white);
-  --shadow-dropdown: 0px 4px 20px 1px rgba(0, 7, 22, 0.10);
   --color-background-direction-button-hover: var(--color-neutral-700);
   --color-background-direction-button-active: var(--color-neutral-750);
   --color-background-direction-button-disabled: var(--color-neutral-250);
@@ -687,9 +687,9 @@
   --border-panel-header-width: 1px;
   --space-panel-split-top: var(--space-scaled-l);
   --space-panel-split-bottom: var(--space-scaled-l);
+  --size-table-selection-horizontal: 40px;
   --space-table-header-tools-bottom: 0px;
   --space-table-content-bottom: var(--space-xxs);
-  --size-table-selection-horizontal: 40px;
   --space-table-header-horizontal: 0px;
   --space-table-embedded-header-top: 0px;
   --space-table-footer-horizontal: var(--space-table-header-horizontal);
@@ -712,8 +712,8 @@
   --color-neutral-700: #333843;
   --color-neutral-100: #f9f9fa;
   --color-neutral-850: #161d26;
-  --color-neutral-300: #dedee3;
   --color-neutral-800: #1b232d;
+  --color-neutral-300: #dedee3;
   --color-neutral-950: #0f141a;
   --color-neutral-500: #8c8c94;
   --color-white: #ffffff;
@@ -732,6 +732,7 @@
 }
 
 .awsui-dark-mode {
+  color-scheme: dark;
   --color-charts-red-300: #d63f38;
   --color-charts-red-400: #ed5958;
   --color-charts-red-500: #fe6e73;
@@ -1035,20 +1036,22 @@
   --color-text-small: var(--color-neutral-450);
   --color-background-inline-code: rgba(255, 255, 255, 0.1);
   --space-button-icon-only-horizontal: var(--space-xxs);
+  --shadow-dropdown: 0px 4px 20px 1px rgba(0, 4, 12, 1);
   --color-text-calendar-month: var(--color-neutral-450);
   --color-background-calendar-current-date: var(--color-neutral-700);
   --color-border-calendar-grid-selected-focus-ring: var(--color-neutral-850);
+  --color-background-code-editor-status-bar: var(--color-neutral-800);
+  --color-border-code-editor-default: var(--color-neutral-600);
   --color-background-code-editor-gutter-default: var(--color-neutral-800);
   --color-text-code-editor-gutter-default: var(--color-neutral-300);
   --color-background-code-editor-gutter-active-line-default: var(--color-neutral-500);
   --color-text-code-editor-gutter-active-line: var(--color-neutral-950);
-  --color-border-code-editor-default: var(--color-neutral-600);
-  --color-background-code-editor-status-bar: var(--color-neutral-800);
   --color-background-code-editor-pane-item-hover: var(--color-neutral-700);
   --color-text-code-editor-tab-button-error: var(--color-neutral-950);
   --color-text-code-editor-status-bar-disabled: var(--color-neutral-600);
   --color-border-tabs-divider: var(--color-neutral-650);
   --color-background-code-editor-loading: var(--color-neutral-800);
+  --shadow-panel: 0px 0px 0px 1px #414d5c;
   --shadow-container: 0px 1px 8px 2px rgba(0, 7, 22, 0.6);
   --shadow-sticky-embedded: 0px 2px 0px 0px #414d5c, 0px 16px 16px -12px rgba(0, 7, 22, 1);
   --shadow-sticky: 0px 4px 8px 1px rgba(0, 7, 22, 0.5);
@@ -1061,13 +1064,11 @@
   --color-text-inverted: var(--color-neutral-950);
   --color-text-icon-subtle: var(--color-neutral-400);
   --color-background-badge-icon: var(--color-error-400);
-  --shadow-panel: 0px 0px 0px 1px #414d5c;
   --color-background-layout-panel-hover: var(--color-neutral-700);
   --color-border-layout: var(--color-neutral-650);
   --size-vertical-panel-icon-offset: 13px;
   --motion-duration-refresh-only-fast: 0ms;
   --shadow-split-bottom: 0px -36px 36px -36px rgba(0, 7, 22, 1);
-  --shadow-dropdown: 0px 4px 20px 1px rgba(0, 4, 12, 1);
   --color-background-direction-button-disabled: var(--color-neutral-750);
   --color-text-dropdown-item-secondary-hover: var(--color-neutral-300);
   --color-text-disabled: var(--color-neutral-600);

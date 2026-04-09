@@ -252,6 +252,7 @@ function generate(): void {
     '}',
     '',
     '.awsui-dark-mode {',
+    '  color-scheme: dark;',
     ...darkLines,
     '}',
     '',
