@@ -123,7 +123,7 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
 
   const missing = new Set<string>();
   for (const token of referencedTokens) {
-    if (!knownTokens.has(token)) {
+    if (!knownTokens.has(token) && !token.startsWith('awsui-')) {
       missing.add(token);
     }
   }
