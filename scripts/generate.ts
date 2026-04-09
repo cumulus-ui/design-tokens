@@ -22,7 +22,8 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PKG_ROOT = resolve(__dirname, '..');
 const DT_DIR = resolve(PKG_ROOT, 'node_modules/@cloudscape-design/design-tokens');
-const STYLES_CSS = resolve(PKG_ROOT, '../styles/index.css');
+const STYLES_CSS = resolve(PKG_ROOT, '../components/node_modules/@cloudscape-design/components/internal/base-component/styles.scoped.css');
+const COMPONENTS_CSS_DIR = resolve(PKG_ROOT, '../components/node_modules/@cloudscape-design/components');
 const COMPONENTS_SRC = resolve(PKG_ROOT, '../components/src');
 
 // ─── 1. Discover token names from upstream JS ─────────────────
@@ -140,14 +141,41 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
       matches.push(m[1].trim());
     }
 
-    if (matches.length >= 2) {
-      result[tokenName] = { light: dehashValue(matches[0]), dark: dehashValue(matches[1]) };
-    } else if (matches.length === 1) {
-      result[tokenName] = { light: dehashValue(matches[0]), dark: dehashValue(matches[0]) };
+    if (matches.length >= 1) {
+      const light = dehashValue(matches[0]);
+      const isColorToken = tokenName.startsWith('color-') || tokenName.startsWith('shadow-');
+      const dark = isColorToken && matches.length >= 2 ? dehashValue(matches[1]) : light;
+      result[tokenName] = { light, dark };
+    }
+  }
+
+  // For tokens not in global-styles, extract fallback values from component CSS
+  const stillMissing = [...missing].filter(t => !result[t]);
+  if (stillMissing.length > 0 && COMPONENTS_CSS_DIR) {
+    const componentCss = collectComponentCss(COMPONENTS_CSS_DIR);
+    for (const tokenName of stillMissing) {
+      const fallbackRe = new RegExp(`var\\(--${tokenName}-[a-z0-9]{6},\\s*([^)]+)\\)`, 'g');
+      const fm = fallbackRe.exec(componentCss);
+      if (fm) {
+        const value = dehashValue(fm[1].trim());
+        result[tokenName] = { light: value, dark: value };
+      }
     }
   }
 
   return result;
+}
+
+function collectComponentCss(dir: string): string {
+  let css = '';
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    const full = join(dir, entry.name);
+    if (entry.isDirectory() && !entry.name.startsWith('.') && entry.name !== 'node_modules') {
+      const scoped = join(full, 'styles.scoped.css');
+      try { css += readFileSync(scoped, 'utf-8'); } catch {}
+    }
+  }
+  return css;
 }
 
 // ─── 4. Generate CSS + JS ─────────────────────────────────────
@@ -217,12 +245,11 @@ function generate(): void {
         while ((m = re.exec(stylesCss)) !== null) {
           matches.push(m[1].trim());
         }
-        if (matches.length >= 2) {
-          missingTokens[tokenName] = { light: dehashValue(matches[0]), dark: dehashValue(matches[1]) };
-          allTokenValues[tokenName] = missingTokens[tokenName];
-          resolvedMore = true;
-        } else if (matches.length === 1) {
-          missingTokens[tokenName] = { light: dehashValue(matches[0]), dark: dehashValue(matches[0]) };
+        if (matches.length >= 1) {
+          const light = dehashValue(matches[0]);
+          const isColorToken = tokenName.startsWith('color-') || tokenName.startsWith('shadow-');
+          const dark = isColorToken && matches.length >= 2 ? dehashValue(matches[1]) : light;
+          missingTokens[tokenName] = { light, dark };
           allTokenValues[tokenName] = missingTokens[tokenName];
           resolvedMore = true;
         }
