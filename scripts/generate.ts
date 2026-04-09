@@ -107,7 +107,7 @@ function findMissingTokens(knownTokens: Set<string>): Record<string, TokenValues
     for (const entry of readdirSync(dir, { withFileTypes: true })) {
       if (entry.isDirectory()) {
         scanDir(join(dir, entry.name));
-      } else if (entry.name === 'styles.ts' || entry.name === 'internal.ts') {
+      } else if (entry.name.endsWith('.ts')) {
         const content = readFileSync(join(dir, entry.name), 'utf-8');
         const re = /var\(--([a-z][a-z0-9-]*?)(?:,|\))/g;
         let m: RegExpExecArray | null;
