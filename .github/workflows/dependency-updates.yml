@@ -1,0 +1,55 @@
+name: Dependency updates
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Check for updates
+        id: check
+        run: |
+          npx npm-check-updates --target minor -j > /tmp/updates.json 2>/dev/null || true
+          UPDATES=$(cat /tmp/updates.json)
+          if [ "$UPDATES" = "{}" ] || [ -z "$UPDATES" ]; then
+            echo "has_updates=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_updates=true" >> "$GITHUB_OUTPUT"
+            echo "$UPDATES" | python3 -c "import sys,json; d=json.load(sys.stdin); [print(f'  {k}: {v}') for k,v in d.items()]"
+          fi
+
+      - name: Apply updates
+        if: steps.check.outputs.has_updates == 'true'
+        run: npx npm-check-updates --target minor -u && npm install
+
+      - name: Generate
+        if: steps.check.outputs.has_updates == 'true'
+        run: npm run generate
+
+      - name: Test
+        if: steps.check.outputs.has_updates == 'true'
+        run: npm test
+
+      - name: Commit and push
+        if: steps.check.outputs.has_updates == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json package-lock.json
+          SUMMARY=$(npx npm-check-updates --target minor 2>/dev/null | grep -E '^\s' | head -10)
+          git commit -m "chore: update dependencies (patch/minor)
+
+          $SUMMARY"
+          git push
