@@ -35,8 +35,8 @@
     "@cloudscape-design/components": "^3.0.1304",
     "@cloudscape-design/design-tokens": "^3.0.91",
     "@cloudscape-design/global-styles": "^1.0.59",
-    "tsx": "^4.22.3",
+    "tsx": "^4.22.4",
     "typescript": "~6.0.3",
-    "vitest": "^4.1.7"
+    "vitest": "^4.1.8"
   }
 }
