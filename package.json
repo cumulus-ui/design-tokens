@@ -32,7 +32,7 @@
     "url": "https://github.com/cumulus-ui/design-tokens"
   },
   "devDependencies": {
-    "@cloudscape-design/components": "^3.0.1309",
+    "@cloudscape-design/components": "^3.0.1310",
     "@cloudscape-design/design-tokens": "^3.0.93",
     "@cloudscape-design/global-styles": "^1.0.60",
     "tsx": "^4.22.4",
