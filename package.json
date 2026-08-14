@@ -32,8 +32,8 @@
     "url": "https://github.com/cumulus-ui/design-tokens"
   },
   "devDependencies": {
-    "@cloudscape-design/components": "^3.0.1345",
-    "@cloudscape-design/design-tokens": "^3.0.106",
+    "@cloudscape-design/components": "^3.0.1346",
+    "@cloudscape-design/design-tokens": "^3.0.107",
     "@cloudscape-design/global-styles": "^1.0.66",
     "tsx": "^4.23.12",
     "typescript": "~6.0.3",
